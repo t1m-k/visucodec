@@ -1,2 +1,4 @@
-# visucodec
-Interactive web platform for learning encoding algorithms implemented in js (stelve) and C (wasm).
+# VisuCodec
+aka ВижуКодек
+
+This project is for learning theory and some practics of encodings
