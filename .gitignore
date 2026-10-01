@@ -17,7 +17,7 @@ dist
 dist-ssr
 *.local
 
-.vscode
+.vscode/*
 !.vscode/c_cpp_properties.json
 .idea
 .DS_Store

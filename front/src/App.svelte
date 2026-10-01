@@ -3,12 +3,13 @@
 
   import { fade, fly } from 'svelte/transition';
   import createWasmModule from './lib/wasm.js';
+  import wasmUrl from './lib/wasm.wasm?url'; 
 
   let currentState = 0;
 
   async function initWASM() {
     const wasm = await createWasmModule({
-      locateFile: (path) => path.endsWith('.wasm') ? '/wasm.wasm' : path
+      locateFile: (path) => path.endsWith('.wasm') ? wasmUrl : path
     });
 
     const jsCallbackPtr = wasm.addFunction((state) => {

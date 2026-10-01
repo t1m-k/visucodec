@@ -1,0 +1,99 @@
+name: My custom workflow \# 1
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  create-tag-and-draft-release:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Check commit message and calculate version
+        id: version_check
+        run: |
+          COMMIT_MSG=$(git log -1 --pretty=%B)
+          echo "Last commit message: $COMMIT_MSG"
+
+          BUMP=""
+          if [[ "$COMMIT_MSG" == *"#major"* ]]; then BUMP="major"; fi
+          if [[ "$COMMIT_MSG" == *"#minor"* ]]; then BUMP="minor"; fi
+          if [[ "$COMMIT_MSG" == *"#patch"* ]]; then BUMP="patch"; fi
+
+          if [ -z "$BUMP" ]; then
+            echo "No release hashtag found. Skipping build."
+            echo "should_release=false" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+
+          echo "should_release=true" >> $GITHUB_OUTPUT
+
+          LATEST_TAG=$(git tag --sort=-v:refname | head -n 1)
+          LATEST_TAG=${LATEST_TAG:-"v0.0.0"}
+          echo "Latest tag found: $LATEST_TAG"
+
+          VERSION=${LATEST_TAG#v}
+          IFS='.' read -r MAJOR MINOR PATCH <<< "$VERSION"
+
+          if [ "$BUMP" == "major" ]; then
+            MAJOR=$((MAJOR + 1)); MINOR=0; PATCH=0
+          elif [ "$BUMP" == "minor" ]; then
+            MINOR=$((MINOR + 1)); PATCH=0
+          elif [ "$BUMP" == "patch" ]; then
+            PATCH=$((PATCH + 1))
+          fi
+
+          NEW_TAG="v$MAJOR.$MINOR.$PATCH"
+          echo "New calculated tag: $NEW_TAG"
+          echo "new_tag=$NEW_TAG" >> $GITHUB_OUTPUT
+
+          if [ "$LATEST_TAG" == "v0.0.0" ]; then
+            RAW_CHANGELOG=$(git log --pretty=format:"* %s")
+          else
+            RAW_CHANGELOG=$(git log ${LATEST_TAG}..HEAD --pretty=format:"* %s")
+          fi
+
+          CLEAN_CHANGELOG=$(echo "$RAW_CHANGELOG" | sed -E 's/ #[a-zA-Z0-9_-]+//g')
+
+          echo "changelog<<EOF" >> $GITHUB_OUTPUT
+          echo "$CLEAN_CHANGELOG" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          echo "$CLEAN_CHANGELOG" | git tag -a "$NEW_TAG" -F -
+          git push origin "$NEW_TAG"
+
+      - name: Create GitHub Release
+        if: steps.version_check.outputs.should_release == 'true'
+        uses: softprops/action-gh-release@efb35369e0ad2afab669f228072c1b0d510eae64
+        with:
+          tag_name: ${{ steps.version_check.outputs.new_tag }}
+          name: Release ${{ steps.version_check.outputs.new_tag }}
+          draft: true
+          prerelease: false
+          body: |
+            ### 📝 Changelog:
+            Did something!
+            ### Commit list:
+            ${{ steps.version_check.outputs.changelog }}
+
+            Change this message!

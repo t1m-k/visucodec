@@ -9,10 +9,7 @@ EMCC_FLAGS = \
 	-s ALLOW_MEMORY_GROWTH=1 \
 	-s ALLOW_TABLE_GROWTH=1
 
-TARGET_JS_DIR = ./front/src/lib
-TARGET_JS     = $(TARGET_JS_DIR)/wasm.js
-TARGET_WASM_DIR = ./front/public
-TARGET_WASM   = $(TARGET_WASM_DIR)/wasm.wasm
+THE_DIR = ./front/src/lib
 
 SRCS = ./back/main.c
 OBJS = $(SRCS:.c=.o)
@@ -21,26 +18,31 @@ OBJS = $(SRCS:.c=.o)
 
 all:
 	@echo "Available targets:"
-	@echo "  make install  - compile C code into WASM"
-	@echo "  make run      - run svelte"
-	@echo "  make build    - npm run build"
-	@echo "  make clean    - delete generated files"
-
-install: $(OBJS)
-	@mkdir -p $(TARGET_JS_DIR)
-	@mkdir -p $(TARGET_WASM_DIR)
-	$(CC) $(CFLAGS) $(OBJS) -o $(TARGET_JS) $(EMCC_FLAGS)
-	@if [ -f $(TARGET_JS_DIR)/wasm.wasm ]; then mv $(TARGET_JS_DIR)/wasm.wasm $(TARGET_WASM); fi
-	@echo "WASM was succesfuly compiled and installed"
+	@echo "  make install  - compile C code into WASM + JS-glue"
+	@echo "  make run      - run svelte dev server"
+	@echo "  make build    - build for release"
+	@echo "  make preview  - preview builded project"
+	@echo "  make clean    - delete all generated files"
 
 %.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
+install: $(OBJS)
+	@mkdir -p $(THE_DIR)
+	rm -f $(THE_DIR)/wasm.js $(THE_DIR)/wasm.wasm
+	$(CC) $(CFLAGS) $(OBJS) -o $(THE_DIR)/wasm.js $(EMCC_FLAGS)
+	@echo ""
+	@echo "WASM was succesfuly compiled and installed to $(THE_DIR)"
+	@echo ""
+
 run:
-	cd front && npm run dev -- --host 0.0.0.0
+	npm run dev --prefix front -- --host 0.0.0.0
 
 build: install
-	cd front && npm run build
+	npm run build --prefix front
+
+preview:
+	npm run preview --prefix front -- --host 0.0.0.0
 
 clean:
-	rm -rf $(TARGET_JS) $(TARGET_WASM) $(OBJS) ./front/dist
+	rm -rf $(THE_DIR)/wasm.js $(THE_DIR)/wasm.wasm $(OBJS) ./dist
