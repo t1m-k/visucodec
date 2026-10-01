@@ -9,6 +9,7 @@ permissions:
   contents: write
   pages: write
   id-token: write
+  deployments: write
 
 concurrency:
   group: "pages"
@@ -17,9 +18,6 @@ concurrency:
 jobs:
   create-tag-and-draft-release:
     runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -44,6 +42,7 @@ jobs:
           fi
 
           echo "should_release=true" >> $GITHUB_OUTPUT
+          echo "bump_type=$BUMP" >> $GITHUB_OUTPUT
 
           LATEST_TAG=$(git tag --sort=-v:refname | head -n 1)
           LATEST_TAG=${LATEST_TAG:-"v0.0.0"}
@@ -76,10 +75,7 @@ jobs:
           echo "$CLEAN_CHANGELOG" >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
 
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-
-          echo "$CLEAN_CHANGELOG" | git tag -a "$NEW_TAG" -F -
+          git tag "$NEW_TAG"
           git push origin "$NEW_TAG"
 
       - name: Create GitHub Release
@@ -92,8 +88,23 @@ jobs:
           prerelease: false
           body: |
             ### 📝 Changelog:
-            Did something!
+
+            Did something? Change this message
+
             ### Commit list:
             ${{ steps.version_check.outputs.changelog }}
 
-            Change this message!
+      - name: Clean up old deployments if major
+        if: steps.version_check.outputs.bump_type == 'major'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh api repos/${{ github.repository }}/deployments --jq '.[].id' | while read -r deploy_id; do
+            echo "Processing deployment $deploy_id"
+            gh api repos/${{ github.repository }}/deployments/$deploy_id/statuses \
+              -X POST \
+              -F state="inactive" \
+              -H "Accept: application/vnd.github+json" > /dev/null 2>&1 || true
+            echo "Deleting deployment $deploy_id"
+            gh api repos/${{ github.repository }}/deployments/$deploy_id -X DELETE
+          done
