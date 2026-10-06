@@ -1,11 +1,11 @@
 CC = emcc
-CFLAGS = -O3 -Wall -Wextra
+CFLAGS = -O2 -Wall -Wextra
 
 EMCC_FLAGS = \
 	-s MODULARIZE=1 \
 	-s EXPORT_ES6=1 \
 	-s ENVIRONMENT='web' \
-	-s EXPORTED_RUNTIME_METHODS="['ccall','cwrap','addFunction']" \
+	-s EXPORTED_RUNTIME_METHODS="['ccall','cwrap','HEAPU8']" \
 	-s ALLOW_MEMORY_GROWTH=1 \
 	-s ALLOW_TABLE_GROWTH=1
 
