@@ -21,13 +21,14 @@ Project is just starting now, but you still can use it or contribute!
 **TODO list** is here:
 - [x] Create base for developing (c + ui connection using states)
 - [x] Test page
-- [ ] First lesson and real beauty
+- [ ] Lesson base
+- [ ] First real lesson
 
 
-## Installation & contrubuting
+## Installation & contributing
 If you want to develop this project on your machine, you need installed docker (or npm and emcc). The easiest way to start is Docker + VSCode with "Dev Containers" extension:
 
-1. Fork this repo and clone **your's**. If you do not want to contribute, you may clone the original
+1. Fork this repo and clone **yours**. If you do not want to contribute, you may clone the original
 2. Open project in VSCode, press `F1` and select `Dev Containers: Reopen in Container`
 3. Run dev server using `make install` and `make run` in the project root folder.
 

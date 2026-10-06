@@ -3,7 +3,7 @@
 
   import { fade, fly } from 'svelte/transition';
   import createWasmModule from './lib/wasm.js';
-  import wasmUrl from './lib/wasm.wasm?url'; 
+  import wasmUrl from './lib/wasm.wasm?url';
 
   let currentState = 0;
 
@@ -13,7 +13,7 @@
     });
 
     const jsCallbackPtr = wasm.addFunction((state) => {
-      currentState = state; 
+      currentState = state;
     }, 'vi'); // get int, return void - uicb(int state) func;
 
     wasm._register_ui_callback(jsCallbackPtr);
