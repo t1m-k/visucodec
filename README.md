@@ -25,13 +25,15 @@ Project is just starting now, but you still can use it or contribute!
 - [ ] First real lesson
 
 
-## Installation & contributing
+## Installation
 If you want to develop this project on your machine, you need installed docker (or npm and emcc). The easiest way to start is Docker + VSCode with "Dev Containers" extension:
 
-1. Fork this repo and clone **yours**. If you do not want to contribute, you may clone the original
+1. Fork this repo and clone **yours**. But if sure that you do not want to contribute, you may clone the original
 2. Open project in VSCode, press `F1` and select `Dev Containers: Reopen in Container`
-3. Run dev server using `make install` and `make run` in the project root folder.
+3. Install dependencies using `make install`
+4. Run dev server using `make compile` and then `make run` in the project root folder.
 
+## Contribution
 If you did something you want to share with the original project, please follow these steps:
 
 1. **Create new branch** for your changes:
@@ -42,7 +44,7 @@ If you did something you want to share with the original project, please follow 
 3. **Commit changes** with a clear message and all files tracked:
     ```bash
     git add .
-    git commit -m "feat: <description here>"
+    git commit -m "feat: <short description here>"
     ```
 4. **Push to your fork on GitHub** and open **Pull request** to the upstream (original repo)
 

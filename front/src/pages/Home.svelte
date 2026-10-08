@@ -1,1 +1,4 @@
-<h3>Hi! In developing!</h3>
+<h1>
+  Information is encoded.<br>
+  Information travels.
+</h1>

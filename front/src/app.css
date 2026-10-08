@@ -1,9 +1,88 @@
-main {
-  font-family: sans-serif;
-  text-align: center;
-  margin-top: 50px;
-  color: #333;
+:root {
+  --bg: #0b0c0b;
+  /* --text: #c7ccc8; */
+  --text: #e8ebe8;
 }
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  color: var(--text);
+}
+
+body {
+  font-family: "IBM Plex Sans", sans-serif;
+}
+
 h1 {
-  color: #00851d;
+  font-size: clamp(28px, 3vw, 42px);
+  font-weight: 200;
+  line-height: 1.15;
+}
+
+header {
+  position: relative;
+
+  display: flex;
+  align-items: center;
+
+  min-height: 80px;
+  padding: 0px 3vw;
+}
+
+.logo {
+  font-size: 18px;
+  font-weight: 500;
+}
+
+nav {
+  display: flex;
+  gap: 28px;
+  margin-left: auto;
+}
+
+nav button {
+  padding: 8px 4px;
+  border: 0;
+  background: none;
+
+  color: var(--text);
+  font: inherit;
+  cursor: pointer;
+}
+
+.satellite {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+
+  width: 40px;
+  height: 40px;
+
+  fill: none;
+  stroke: #ffffff;
+  stroke-linecap: round;
+}
+
+.signal {
+  position: absolute;
+
+  left: 50%;
+  top: 80px;
+
+  width: 100px;
+  height: 300px;
+
+  transform: translateX(-50%);
+
+  fill: none;
+  stroke: #ffffff;
+  stroke-width: 1;
 }

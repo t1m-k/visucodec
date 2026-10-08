@@ -18,7 +18,8 @@ OBJS = $(SRCS:.c=.o)
 
 all:
 	@echo "Available targets:"
-	@echo "  make install  - compile C code into WASM + JS-glue"
+	@echo "  make install  - install npm dependencies"
+	@echo "  make compile  - compile C code into WASM + JS-glue"
 	@echo "  make run      - run svelte dev server"
 	@echo "  make build    - build for release"
 	@echo "  make preview  - preview builded project"
@@ -27,7 +28,10 @@ all:
 %.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
-install: $(OBJS)
+install:
+	npm install --prefix front
+
+compile: $(OBJS)
 	@mkdir -p $(THE_DIR)
 	rm -f $(THE_DIR)/wasm.js $(THE_DIR)/wasm.wasm
 	$(CC) $(CFLAGS) $(OBJS) -o $(THE_DIR)/wasm.js $(EMCC_FLAGS)
