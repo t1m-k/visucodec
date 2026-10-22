@@ -5,7 +5,7 @@ EMCC_FLAGS = \
 	-s MODULARIZE=1 \
 	-s EXPORT_ES6=1 \
 	-s ENVIRONMENT='web' \
-	-s EXPORTED_RUNTIME_METHODS="['ccall','cwrap','HEAPU8']" \
+	-s EXPORTED_RUNTIME_METHODS="['ccall','cwrap','HEAPU8','UTF8ToString']" \
 	-s ALLOW_MEMORY_GROWTH=1 \
 	-s ALLOW_TABLE_GROWTH=1
 

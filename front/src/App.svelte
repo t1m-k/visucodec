@@ -3,31 +3,50 @@
 
   import createWasmModule from './lib/wasm.js';
   import wasmUrl from './lib/wasm.wasm?url';
+  import { setContext } from 'svelte';
   import { fade, fly } from 'svelte/transition';
   import githubLogo from './assets/GitHub_Lockup_White.svg';
   import satelliteIcon from './assets/satellite.svg?url';
 
   import Home from './pages/Home.svelte';
 	import About from './pages/About.svelte';
-  let pagePromise = $state(loadPage('Home', { loadPage: loadPage }));
+  // import LessonPrefix from './pages/LessonPrefix.svelte';
+  let pagePromise = $state.raw(null);
 
   async function loadPage(pageName, props = {}) {
-    const module = await import(`./pages/${pageName}.svelte`);
-    pagePromise = {
-      Component: module.default,
-      props: props
-    };
+    console.log('loadPage called for:', pageName);
+    pagePromise = (async () => {
+      try {
+        console.log('Attempting to import page:', `./pages/${pageName}.svelte`);
+        const module = await import(`./pages/${pageName}.svelte`);
+        console.log('Import successful for:', pageName);
+        return {
+          Component: module.default,
+          props: props
+        };
+      } catch (err) {
+        console.error('Error loading page:', pageName, err);
+        throw err;
+      }
+    })();
   }
 
   async function initWASM() {
     const wasm = await createWasmModule({
       locateFile: (path) => path.endsWith('.wasm') ? wasmUrl : path
     });
-
+    loadPage('Home');
     return wasm;
   }
 
   const wasmPromise = initWASM();
+
+  setContext('context', {
+    get wasm() {
+      return wasmPromise;
+    },
+    loadPage
+  });
 </script>
 
 {#await wasmPromise}
@@ -36,11 +55,12 @@
   </div>
 {:then wasm}
   <header>
-    <button class="logo" onclick={() => loadPage('Home', { loadPage: loadPage })}>VisuCodec</button>
+    <button class="logo" onclick={() => loadPage('Home')}>VisuCodec</button>
     <a href="https://t1m-k.github.io/visucodec/" target="_blank" rel="noopener noreferrer" aria-label="Satellite icon">
-      <img class="satellite" src={satelliteIcon} alt="Satellite icon" aria-hidden="true" />
+      <img class="satellite" src={satelliteIcon} alt="Satellite icon" aria-hidden="true" style="height: 3em"/>
     </a>
     <nav>
+      <button onclick={() => loadPage('LessonPrefix')}>Lesson 1</button>
       <button onclick={() => loadPage('About', { title: 'This is about page!!!' })}>About</button>
     </nav>
   </header>
