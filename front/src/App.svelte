@@ -4,14 +4,16 @@
   import createWasmModule from './lib/wasm.js';
   import wasmUrl from './lib/wasm.wasm?url';
   import { fade, fly } from 'svelte/transition';
+  import githubLogo from './assets/GitHub_Lockup_White.svg';
+  import satelliteIcon from './assets/satellite.svg?url';
 
   import Home from './pages/Home.svelte';
 	import About from './pages/About.svelte';
-  let pagePromise = $state(loadPage('Home'));
+  let pagePromise = $state(loadPage('Home', { loadPage: loadPage }));
 
   async function loadPage(pageName, props = {}) {
     const module = await import(`./pages/${pageName}.svelte`);
-    return {
+    pagePromise = {
       Component: module.default,
       props: props
     };
@@ -34,17 +36,12 @@
   </div>
 {:then wasm}
   <header>
-    <span class="logo">VisuCodec</span>
-    <svg class="satellite" viewBox="0 0 40 40" stroke-width="0.7" aria-hidden="true">
-      <circle cx="25" cy="15" r="5" stroke-width="1.5"/>
-      <line x1="22" y1="11" x2="6" y2="3" />
-      <line x1="20.5" y1="14" x2="3" y2="10" />
-      <line x1="22" y1="19" x2="6" y2="27" />
-      <line x1="20.5" y1="16" x2="3" y2="20" />
-    </svg>
+    <button class="logo" onclick={() => loadPage('Home', { loadPage: loadPage })}>VisuCodec</button>
+    <a href="https://t1m-k.github.io/visucodec/" target="_blank" rel="noopener noreferrer" aria-label="Satellite icon">
+      <img class="satellite" src={satelliteIcon} alt="Satellite icon" aria-hidden="true" />
+    </a>
     <nav>
-      <button onclick={() => pagePromise = loadPage('Home')}>Main</button>
-      <button onclick={() => pagePromise = loadPage('About', { title: 'This is about page!!!' })}>About</button>
+      <button onclick={() => loadPage('About', { title: 'This is about page!!!' })}>About</button>
     </nav>
   </header>
   {#await pagePromise}
@@ -52,14 +49,22 @@
       <p>Page is loading...</p>
     </div>
   {:then { Component, props }}
-  <svg class="signal" viewBox="0 0 100 300" aria-hidden="true">
-      <path d="M 10 0 C 50 70, 42 90, 58 130 C 72 165, 42 190, 50 230 C 56 260, 48 280, 52 300" />
-  </svg>
-  <main transition:fade>
+  {#if Component === Home}
+    <svg class="signal" viewBox="0 0 100 200" aria-hidden="true" preserveAspectRatio="none">
+       <path d="M 53 2 L 0 112 L 86 83 L 33 200 L 100 72 L 9 104 L 53 2 Z" />
+    </svg>
+  {/if}
+  <main>
     <Component {...props} />
   </main>
   <footer>
-    footer content
+    <a href="https://t1m-k.github.io/visucodec/" target="_blank" rel="noopener noreferrer" aria-label="Satellite icon">
+      <img src={satelliteIcon} alt="Satellite icon" aria-hidden="true" style="height: 3em"/>
+    </a>
+    <p>Made with love.</p>
+    <a href="https://github.com/t1m-k/visucodec/" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+      <img src={githubLogo} alt="GitHub" style="height: 1em; display: block" />
+    </a>
   </footer>
   {:catch error}
     <p style="color: red;">Page loading error: {error.message}</p>

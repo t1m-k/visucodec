@@ -1,44 +1,47 @@
 :root {
-  --bg: #0b0c0b;
-  /* --text: #c7ccc8; */
-  --text: #e8ebe8;
+  --bg: #000000;
+  --text: #cccccc;
+  --green: #008000;
 }
 
 * {
   box-sizing: border-box;
 }
 
-html,
-body {
+html, body {
   margin: 0;
   padding: 0;
   background: var(--bg);
   color: var(--text);
-}
-
-body {
   font-family: "IBM Plex Sans", sans-serif;
 }
 
+#app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
 h1 {
-  font-size: clamp(28px, 3vw, 42px);
+  font-size: clamp(28px, 3vw, 50px);
   font-weight: 200;
   line-height: 1.15;
+  text-align: center;
 }
 
 header {
   position: relative;
-
   display: flex;
   align-items: center;
-
   min-height: 80px;
-  padding: 0px 3vw;
+  padding: 0px 3vw 0px 2vw;
+  z-index: 10;
 }
 
 .logo {
   font-size: 18px;
   font-weight: 500;
+  color: #ffffff;
 }
 
 nav {
@@ -47,14 +50,16 @@ nav {
   margin-left: auto;
 }
 
-nav button {
-  padding: 8px 4px;
+button {
   border: 0;
   background: none;
-
   color: var(--text);
   font: inherit;
   cursor: pointer;
+}
+
+nav button {
+  padding: 8px 4px;
 }
 
 .satellite {
@@ -62,27 +67,82 @@ nav button {
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
-
-  width: 40px;
   height: 40px;
-
-  fill: none;
-  stroke: #ffffff;
-  stroke-linecap: round;
 }
 
 .signal {
-  position: absolute;
-
+  position: fixed;
+  top: 40px;
   left: 50%;
-  top: 80px;
-
-  width: 100px;
-  height: 300px;
-
   transform: translateX(-50%);
+  width: 400px;
+  height: calc(100vh - 60px - 64px);
+  fill: #ffffff;
+  pointer-events: none;
+  z-index: 20;
+  filter:
+    drop-shadow(0 0 10px #ff5252)
+    drop-shadow(0 0 5px #00e1ff);
+  /* border: 1px solid white; */
+}
 
-  fill: none;
-  stroke: #ffffff;
-  stroke-width: 1;
+main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  position: relative;
+  z-index: 2;
+}
+
+footer {
+  border-top: 2px solid var(--green);
+  width: 100%;
+  min-height: 64px;
+  padding: 0px 3vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  flex-shrink: 0;
+  gap: 10px;
+  font-weight: 500;
+  font-size: 16px;
+}
+
+#home-1 {
+  position: absolute;
+  top: 47%;
+  left: calc(50% - 300px - 20vw);
+}
+
+#home-2 {
+  position: absolute;
+  top: 22%;
+  left: calc(50% + 300px);
+}
+
+#home-explore {
+  position: relative;
+  left: 42px;
+  bottom: 20px;
+  
+  padding: 8px 20px;
+  font-size: 16px;
+  font-weight: 200;
+  color: white;
+  background: var(--green);
+  border: 1px solid var(--green);
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: lowercase;
+}
+
+#home-explore:hover {
+  background: transparent;
+  color: var(--green);
+  box-shadow: 0 0 15px var(--green);
 }

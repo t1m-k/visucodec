@@ -1,4 +1,4 @@
-<h3>About page</h3>
+<h1>About page</h1>
 <script>
     let data = $props()
 </script>

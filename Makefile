@@ -42,7 +42,7 @@ compile: $(OBJS)
 run:
 	npm run dev --prefix front -- --host 0.0.0.0
 
-build: install
+build:
 	npm run build --prefix front
 
 preview:
