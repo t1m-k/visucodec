@@ -28,7 +28,7 @@ jobs:
           docker run --rm \
             -v $(pwd):/src \
             emscripten/emsdk:latest \
-            bash -c "npm ci --prefix front && make build"
+            bash -c "npm ci --prefix front && make compile && make build"
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
