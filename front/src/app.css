@@ -128,7 +128,28 @@ footer {
   position: relative;
   left: 42px;
   bottom: 20px;
-  
+  margin: 0;
+}
+
+main > p {
+  max-width: 710px;
+  margin: 0 auto 1.25rem;
+  font-size: 18px;
+  font-weight: 200;
+  line-height: 1.6;
+  text-align: center;
+}
+
+main code {
+  font-family: "IBM Plex Mono", monospace;
+  color: #ffffff;
+  background: #111111;
+  border-radius: 8px;
+}
+
+.pill-button {
+  display: block;
+  margin: 1.5rem auto 0;
   padding: 8px 20px;
   font-size: 16px;
   font-weight: 200;
@@ -136,13 +157,28 @@ footer {
   background: var(--green);
   border: 1px solid var(--green);
   border-radius: 20px;
-  cursor: pointer;
-  transition: all 0.3s ease;
   text-transform: lowercase;
+  transition: all 0.3s ease;
 }
 
-#home-explore:hover {
+.pill-button:hover {
   background: transparent;
   color: var(--green);
+  box-shadow: 0 0 15px var(--green);
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 280px;
+  max-width: 340px;
+  padding: 1.5rem;
+  border: 1px solid var(--green);
+  border-radius: 16px;
+  text-align: center;
+  transition: box-shadow 0.3s ease;
+}
+
+.card:hover {
   box-shadow: 0 0 15px var(--green);
 }

@@ -11,7 +11,7 @@ EMCC_FLAGS = \
 
 THE_DIR = ./front/src/lib
 
-SRCS = ./back/main.c
+SRCS = ./back/main.c ./back/codecs/morse.c
 OBJS = $(SRCS:.c=.o)
 
 .PHONY: all install run build clean

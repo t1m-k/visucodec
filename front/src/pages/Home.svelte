@@ -5,4 +5,4 @@
 
 <h1 id="home-1">Information travels</h1>
 <h1 id="home-2">It must be encoded</h1>
-<button id="home-explore" onclick={() => loadPage('About', { title: 'Exploring!' })}>Explore</button>
+<button id="home-explore" class="pill-button" onclick={() => loadPage('About', { title: 'Exploring!' })}>Explore</button>

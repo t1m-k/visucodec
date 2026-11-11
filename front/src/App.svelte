@@ -9,8 +9,6 @@
   import satelliteIcon from './assets/satellite.svg?url';
 
   import Home from './pages/Home.svelte';
-	import About from './pages/About.svelte';
-  // import LessonPrefix from './pages/LessonPrefix.svelte';
   let pagePromise = $state.raw(null);
 
   async function loadPage(pageName, props = {}) {
@@ -60,7 +58,7 @@
       <img class="satellite" src={satelliteIcon} alt="Satellite icon" aria-hidden="true" style="height: 3em"/>
     </a>
     <nav>
-      <button onclick={() => loadPage('LessonPrefix')}>Lesson 1</button>
+      <!-- <button onclick={() => loadPage('LessonPrefix')}>Test lesson</button> -->
       <button onclick={() => loadPage('About', { title: 'This is about page!!!' })}>About</button>
     </nav>
   </header>

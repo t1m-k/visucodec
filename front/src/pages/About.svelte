@@ -1,3 +1,8 @@
+<script>
+  import { getContext } from "svelte";
+  const { wasm, loadPage } = getContext('context');
+</script>
+
 <h1>About the project</h1>
 
 <p>
@@ -21,17 +26,6 @@
   there is still so much left to explore.
 </p>
 
-<style>
-p {
-  max-width: 710px;
-  margin: 0 auto 1.25rem;
-  font-size: 18px;
-  font-weight: 200;
-  line-height: 1.6;
-  text-align: center;
-}
-
-p:last-child {
-  margin-bottom: 0;
-}
-</style>
+<button class="pill-button" onclick={() => loadPage('Concepts')}>
+  go further
+</button>

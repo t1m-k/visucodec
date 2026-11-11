@@ -18,11 +18,7 @@ and concluding with modern coding theory, e.g. LDPC codes.
 
 Project is just starting now, but you still can use it or contribute!
 
-**TODO list** is here:
-- [x] Create base for developing (c + ui connection using states)
-- [x] Test page
-- [ ] Lesson base
-- [ ] First real lesson
+**TODO list** will be here.
 
 
 ## Installation
